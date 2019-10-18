@@ -190,6 +190,7 @@ public struct WebSocketService :  OptionSet {
     public static var Background: WebSocketService { return self.init(1 << 2) }
     /// Allow socket to handle voice.
     public static var Voice: WebSocketService { return self.init(1 << 3) }
+    public static var Signaling: WebSocketService { return self.init(1 << 4) }
 }
 
 private let atEndDetails = "streamStatus.atEnd"
@@ -1079,6 +1080,10 @@ private class InnerWebSocket: Hashable {
         if services.contains(.Voice) {
             rd.setProperty(StreamNetworkServiceTypeValue.voice.rawValue, forKey: Stream.PropertyKey.networkServiceType)
             wr.setProperty(StreamNetworkServiceTypeValue.voice.rawValue, forKey: Stream.PropertyKey.networkServiceType)
+        }
+        if services.contains(.Signaling), #available(iOS 10.0, *) {
+            rd.setProperty(StreamNetworkServiceTypeValue.callSignaling.rawValue, forKey: Stream.PropertyKey.networkServiceType)
+            wr.setProperty(StreamNetworkServiceTypeValue.callSignaling.rawValue, forKey: Stream.PropertyKey.networkServiceType)
         }
         if allowSelfSignedSSL {
             let prop: Dictionary<NSObject,NSObject> = [kCFStreamSSLPeerName: kCFNull, kCFStreamSSLValidatesCertificateChain: NSNumber(value: false)]
