@@ -1040,11 +1040,14 @@ private class InnerWebSocket: Hashable {
                 reqs += "\(key): \(val)\r\n"
             }
         }
-        var keyb = [UInt32](repeating: 0, count: 4)
-        for i in 0 ..< 4 {
-            keyb[i] = arc4random()
+
+        let keyb: [UInt32] = (0 ..< 4).map { _ in arc4random() }
+        let rkey: String = withUnsafePointer(to: keyb) { keybPointer in
+            let source = Data(bytes: keybPointer.pointee, count: 16)
+            let options = NSData.Base64EncodingOptions(rawValue: 0)
+            return source.base64EncodedString(options: options)
         }
-        let rkey = Data(bytes: UnsafePointer(keyb), count: 16).base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
+
         reqs += "Sec-WebSocket-Key: \(rkey)\r\n"
         reqs += "\r\n"
         var header = [UInt8]()
