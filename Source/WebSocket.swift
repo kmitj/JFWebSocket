@@ -755,6 +755,12 @@ private class InnerWebSocket: Hashable {
                     lock()
                     frames += [frame]
                     unlock()
+                    
+                    if frame.code == .close {
+                        self.closeCode = frame.statusCode
+                        self.closeReason = frame.utf8.text
+                        self.closeFinal = true
+                    }
                 default:
                     break
                 }
