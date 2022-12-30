@@ -423,7 +423,9 @@ private class Inflater {
     }
     deinit{
         _ = inflateEndG(&strm)
-        free(buffer)
+        if let buf = buffer {
+            free(buf)
+        }
     }
     func inflate(_ bufin : UnsafePointer<UInt8>, length : Int, final : Bool) throws -> (p : UnsafeMutablePointer<UInt8>, n : Int){
         var buf = buffer
@@ -485,7 +487,9 @@ private class Deflater {
     }
     deinit{
         _ = deflateEnd(&strm)
-        free(buffer)
+        if let buf = buffer {
+            free(buf)
+        }
     }
     /*func deflate(_ bufin : UnsafePointer<UInt8>, length : Int, final : Bool) -> (p : UnsafeMutablePointer<UInt8>, n : Int, err : NSError?){
         return (nil, 0, nil)
@@ -624,11 +628,11 @@ private class InnerWebSocket: Hashable {
         }
     }
     deinit{
-        if outputBytes != nil {
-            free(outputBytes)
+        if let buf = outputBytes {
+            free(buf)
         }
-        if inputBytes != nil {
-            free(inputBytes)
+        if let buf = inputBytes {
+            free(buf)
         }
         pthread_mutex_init(&mutex, nil)
     }
