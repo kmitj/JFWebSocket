@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                   = "JFWebSocket"
-  s.version                = "2.9.2"
+  s.version                = "2.9.3"
   s.summary                = "A high performance WebSocket client library for Swift."
   s.homepage               = "https://github.com/tidwall/SwiftWebSocket"
   s.license                = { :type => "Attribution License", :file => "LICENSE" }
